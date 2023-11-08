@@ -1,0 +1,17 @@
+{% extends 'home.html' %}
+
+{% block content %}
+<h1>Take Attendance for {{ group.name }}</h1>
+<form method="post">
+    {% csrf_token %}
+    {% for student in students %}
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" name="{{ student.id }}" id="student-{{ student.id }}" checked>
+            <label class="form-check-label" for="student-{{ student.id }}">{{ student }}</label>
+        </div>
+    {% endfor %}
+    <br>
+    <a href="{% url 'list_students' group_name=group.name %}" class="btn btn-secondary">Back</a>
+    <button type="submit" class="btn btn-primary">Submit Attendance</button>
+</form><br>
+{% endblock %}

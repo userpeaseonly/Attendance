@@ -1,0 +1,17 @@
+{% extends 'home.html' %}
+
+{% block content %}
+    <h1>Attendance History</h1>
+    <ul class="list-group">
+        {% for date in dates %}
+            <li class="list-group-item">
+                <a href="{% url 'view_attendance' group.name date %}">{{ date }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <br>
+    <a href="{% url 'list_students' group_name=group.name %}" class="btn btn-secondary">Back</a>
+
+
+{% endblock %}

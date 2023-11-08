@@ -1,0 +1,52 @@
+{% extends 'home.html' %}
+
+{% block content %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Students in the group {{ group.name }}</h1>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">First Name</th>
+                                    <th scope="col">Last Name</th>
+                                    <th scope="col">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for student in students %}
+                                <tr>
+                                    <th scope="col">{{ student.id }}</th>
+                                    <td scope="col">{{ student.first_name }}</td>
+                                    <td scope="col">{{ student.last_name }}</td>
+                                    <td scope="col">{{ student.status }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <a type="submit" class="btn btn-secondary" href="{% url 'home' %}">Back</a>
+                    <a type="submit" class="btn btn-primary" href="{% url 'attendance_history' group_name=group.name %}">History</a>
+                    {% if have_taken_an_attendance %}
+                    <a type="submit" class="btn btn-warning" href="{% url 'update_attendance' group.name %}">Update</a>
+                    {% else %}
+                    <a type="submit" class="btn btn-success" href="{% url 'take_an_attendance' group.name %}">Attendance</a>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

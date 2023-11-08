@@ -1,0 +1,31 @@
+{% extends 'home.html' %}
+
+{% block content %}
+    <h1>Attendance for {{ group.name }} on {{ date }}</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Student</th>
+                <th scope="col">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in attendance %}
+                <tr>
+                    <td>{{ record.student.first_name }} {{ record.student.last_name }}</td>
+                    {% if record.present %}
+                        <td>Present</td>
+                    {% else %}
+                        <td>Absent</td>
+                    {% endif %}
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="2">No attendance records for this date.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'attendance_history' group.name %}" class="btn btn-secondary">Back</a>
+</div>
+{% endblock %}
