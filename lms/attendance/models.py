@@ -9,6 +9,7 @@ class Group(models.Model):
     name = models.CharField(max_length=20, unique=True)
     __str__ = lambda self: self.name
 
+
 class Student(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
@@ -16,13 +17,24 @@ class Student(models.Model):
     status = models.FloatField(null=True, blank=True)
     __str__ = lambda self: f'{self.first_name} {self.last_name}'
 
-    # @property
-    # def attendence_percentage(self):
-    #     pass
-    #
-    # def save(self, *args, **kwargs):
-    #     self.status = self.attendence_percentage
-    #     super().save(*args, **kwargs)
+    @property
+    def attendance_percentage(self):
+        if self.pk:  # Check if the student has been saved
+            total_attendances = self.attendancestatus_set.count()
+            present_attendances = self.attendancestatus_set.filter(present=True).count()
+
+            if total_attendances > 0:
+                percentage = (present_attendances / total_attendances) * 100
+                return round(percentage, 2)
+            else:
+                return 0.0
+        else:
+            return 0.0
+
+    def save(self, *args, **kwargs):
+        self.status = self.attendance_percentage
+        super().save(*args, **kwargs)
+
 
 class Attendance(models.Model):
     teacher = models.ForeignKey(User, on_delete=models.CASCADE)
