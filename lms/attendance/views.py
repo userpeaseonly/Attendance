@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.utils import timezone
@@ -136,3 +136,11 @@ def view_attendance(request, group_name, date):
     attendance = attendance[0].attendancestatus_set.all()
     context = {'group': group, 'date': selected_date, 'attendance': attendance}
     return render(request, 'view_attendance.html', context)
+
+
+def student_detail(request, group_name, student_id):
+    teacher = request.user
+    student = get_object_or_404(Student, pk=student_id)
+    attendance_statuses = AttendanceStatus.objects.filter(student=student, attendance__teacher=teacher)
+    context = {'student': student, 'attendance_statuses': attendance_statuses, "group": group_name, 'todays_date': TODAYS_DATE}
+    return render(request, 'student_detail.html', context)

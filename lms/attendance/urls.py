@@ -10,4 +10,5 @@ urlpatterns = [
     path('list_students/update_attendance/<str:group_name>', views.update_attendance, name='update_attendance'),
     path('list_students/<str:group_name>/history/', views.attendance_history, name='attendance_history'),
     path('list_students/<str:group_name>/history/<str:date>/', views.view_attendance, name='view_attendance'),
+    path('list_students/<str:group_name>/<int:student_id>/', views.student_detail, name='student_detail'),
 ]

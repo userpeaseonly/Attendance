@@ -1,6 +1,8 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 # Create your models here.
@@ -53,3 +55,10 @@ class AttendanceStatus(models.Model):
 
     def __str__(self):
         return f'{self.student} - {self.present}'
+
+
+@receiver(post_save, sender=AttendanceStatus)
+def update_student_status(sender, instance, **kwargs):
+    student = instance.student
+    student.status = student.attendance_percentage
+    student.save()

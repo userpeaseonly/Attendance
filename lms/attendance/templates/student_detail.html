@@ -1,0 +1,46 @@
+{% extends 'home.html' %}
+
+{% block content %}
+      <div class="container mt-4">
+
+    <div class="mb-3">
+        <a href="{% url 'list_students' group_name=student.group.name %}" class="btn btn-secondary">Back</a>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        <h2 class="card-title">Name: {{ student.first_name }} {{ student.last_name }}</h2>
+        <p class="card-text">Group: {{ student.group }}</p>
+        <p class="card-text">Total Presents: {{ student.status }}%</p>
+      </div>
+    </div>
+
+    <h2 class="mt-4">Attendance Records</h2>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Attendance Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for status in attendance_statuses %}
+          <tr>
+            <td>{{ status.attendance.date|date:"F j Y" }}</td>
+            <td>
+              {% if status.present %}
+                Present
+              {% else %}
+                Absent
+              {% endif %}
+            </td>
+          </tr>
+        {% empty %}
+            <tr>
+                <td colspan="2">No attendance records found.</td>
+            </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}
